@@ -1,10 +1,7 @@
-#!/bin/bash
 #===============================================================================
-#         FILE: all_steps.RNAseq_APA.pip.py
+#         FILE: iclip_seq step4
 #
-#        USAGE: python all_steps.RNAseq_APA.pip.py --project --<OPTIONS> 
-#
-#  DESCRIPTION: Fully automatic pipline profiling APA,IPA and gene expression using RNAseq data from GEO
+#  DESCRIPTION: Fully automatic pipline count iclip-seq data by calling Rscript step4counts.R
 #
 #      OPTIONS:  --help;                                       show the help message and exit
 #                --project(required) <project_name>; define the project name;
@@ -14,13 +11,12 @@
 #                --threads(required) <# of threads>; define # of threads;
 #                --genome(Optional) <mm9(default)/hg19/rn5>; define genome version;
 #
-# REQUIREMENTS: Pythod_Modules as 'import section'; "APAanalizer" in bioconductor; "STAR" as RNAseq mapper; SRA toolkit; RSeQ;
+# REQUIREMENTS: Python_Modules as 'import section';"bowtie2" as RNAseq mapper; SRA toolkit; RSeQ;
 #
-#       AUTHOR: Ruijia Wang  rjwang.bioinfo@gmail.com
-#      ADVISOR: Bin Tian     btian@njms.rutgers.edu
-# ORGANIZATION: 
+#       AUTHOR: Wei Wang  wwei320@gmail.com
+#       
 #      VERSION: 2.0
-#      CREATED: 2018-June-05
+#      CREATED: 2019-June-05
 #===============================================================================
 ####import section
 import matplotlib; matplotlib.use('agg')
