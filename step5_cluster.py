@@ -1,4 +1,24 @@
-#######12/30/19. cluster uniquely mapped reads in Stau1 iCLIP data by modifying a few funcs from dinghai's PASS pipline
+#===============================================================================
+#         FILE: iclip_seq step5
+#
+#  DESCRIPTION: cluster uniquely mapped reads in Stau1 iCLIP data by modifying a few funcs from current PASS pipline
+#
+#      OPTIONS:  --help;                                       show the help message and exit
+#                --project(required) <project_name>; define the project name;
+#                --rootdir(required) <path_to_your_root_dir>; define the rootdir;  
+#                --sradir(required) <path_to_your_sra_dir>; define the sra dir;
+#                --refdir(required) <path_to_your_ref_dir>; define the reference dir;#                
+#                --threads(required) <# of threads>; define # of threads;
+#                --genome(Optional) <mm9(default)/hg19/rn5>; define genome version;
+#
+# REQUIREMENTS: Python_Modules as 'import section';"STAR" as RNAseq mapper; SRA toolkit; RSeQ;
+#
+#       AUTHOR: Wei Wang  wwei320@gmail.com
+#       
+#      VERSION: 2.0
+#      CREATED: 2019-Oct-05
+#===============================================================================
+ 
 
 
 
@@ -7,8 +27,7 @@ def split_sam(sam_file, min_mapq = 10, direction = 'reverse', spike_in = None):
     '''add FM tag to show first aligement position for both plus and minus strand in unique mapped reads sam file
     '''
     pass_file = open(sam_file.replace('.sam', '.FM.sam'), 'w')
-    # nonpass_file = open(sam_file.replace('.sam', '.nonpass'), 'w')
-    # if spike_in: spike_in_file = open(sam_file.replace('.sam', '.spike_in'), 'w')
+    
     
     lap = 0
 
@@ -28,15 +47,7 @@ def split_sam(sam_file, min_mapq = 10, direction = 'reverse', spike_in = None):
             if (direction.lower() == 'reverse' and flag == '16') or \
                     (direction.lower() == 'forward' and flag == '0'):
                 strand = '+'
-                # Process cigar to determine the LAP.
-                # Insertion (I) will not affect the covered distance.
-                
-                # get_seq() returns reverse complemented sequence if strand == '-'
-                # downstream_seq = ps.get_seq(chromosome, strand,
-                #                          start = position + covered,
-                #                          end = position + covered + t_stretch_len - 1,
-                #                          genome = genome)
-                # lap = position + covered - 1
+               
                 lap=position
             elif (direction.lower() == 'reverse' and flag == '0') or \
                     (direction.lower() == 'forward' and flag == '16'):
@@ -53,10 +64,7 @@ def split_sam(sam_file, min_mapq = 10, direction = 'reverse', spike_in = None):
                 #                          genome = genome)
                 # lap = position
                 lap = position + covered - 1
-                # ML: Matched Length 
-                # UL: Unmatched Length
-                # LM: Last Mapped position 
-                # FM: First Mapped position 
+              
             else:
                 continue
 
