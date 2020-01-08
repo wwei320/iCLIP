@@ -1,3 +1,24 @@
+#===============================================================================
+#         FILE: iclip_seq step4
+#
+#  DESCRIPTION: Fully automatic pipline count iclip-seq #reads
+#
+#      OPTIONS:  --help;                                       show the help message and exit
+#                --project(required) <project_name>; define the project name;
+#                --rootdir(required) <path_to_your_root_dir>; define the rootdir;  
+#                --sradir(required) <path_to_your_sra_dir>; define the sra dir;
+#                --refdir(required) <path_to_your_ref_dir>; define the reference dir;#                
+#                --threads(required) <# of threads>; define # of threads;
+#                --genome(Optional) <mm9(default)/hg19/rn5>; define genome version;
+#
+# REQUIREMENTS: Python_Modules as 'import section'; SRA toolkit; RSeQ;
+#
+#       AUTHOR: Wei Wang  wwei320@gmail.com
+#       
+#      VERSION: 2.0
+#      CREATED: 2019-June-05
+#===============================================================================
+
 rm(list = ls())
 suppressMessages(library("GenomicAlignments"))
 suppressMessages(library("GenomicRanges"))
