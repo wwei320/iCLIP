@@ -1,10 +1,7 @@
-#!/bin/bash
 #===============================================================================
-#         FILE: all_steps.RNAseq_APA.pip.py
+#         FILE: iclip_seq step2
 #
-#        USAGE: python all_steps.RNAseq_APA.pip.py --project --<OPTIONS> 
-#
-#  DESCRIPTION: Fully automatic pipline profiling APA,IPA and gene expression using RNAseq data from GEO
+#  DESCRIPTION: Fully automatic pipline mapping downloaded iclip-seq fastq data
 #
 #      OPTIONS:  --help;                                       show the help message and exit
 #                --project(required) <project_name>; define the project name;
@@ -14,13 +11,12 @@
 #                --threads(required) <# of threads>; define # of threads;
 #                --genome(Optional) <mm9(default)/hg19/rn5>; define genome version;
 #
-# REQUIREMENTS: Pythod_Modules as 'import section'; "APAanalizer" in bioconductor; "STAR" as RNAseq mapper; SRA toolkit; RSeQ;
+# REQUIREMENTS: Python_Modules as 'import section';"STAR" as RNAseq mapper; SRA toolkit; RSeQ;
 #
-#       AUTHOR: Ruijia Wang  rjwang.bioinfo@gmail.com
-#      ADVISOR: Bin Tian     btian@njms.rutgers.edu
-# ORGANIZATION: 
+#       AUTHOR: Wei Wang  wwei320@gmail.com
+#       
 #      VERSION: 2.0
-#      CREATED: 2018-June-05
+#      CREATED: 2019-June-05
 #===============================================================================
 ####import section
 import matplotlib; matplotlib.use('agg')
@@ -171,35 +167,13 @@ samples=dfsample.Run.unique().tolist()
 
 #for sample in samples:
 for sample in samples:
-# ###pre-step1 Download sra and convert to Fastq files####
-# 	print "\n--------------Pre-step1: Download sra and convert to Fastq files, Sample: "+ sample +"----------------"	
-# 	srafile=sample+'.sra'
-# 	cmd1='prefetch -q '+ sample
-# 	os.system(cmd1)
-	
-# 	cmd2='mv '+sradir+srafile+' ' +fqmdir
-# 	os.system(cmd2)
+
 	
  	seqtype=dfsample[dfsample.Run==sample].LibraryLayout.values[0]
  	samplename=dfsample[dfsample.Run==sample].samplename.values[0]
 	
-# 	if seqtype=='SINGLE':	
-# 		cmd3='fastq-dump --outdir ' + fqmdir +' '+ fqmdir + srafile
-# 	elif seqtype=='PAIRED':
-# 		cmd3='fastq-dump --outdir ' +fqmdir +' --split-files --split-3 ' + fqmdir+srafile
-# 	os.system(cmd3)
-	
-# 	cmd4 = 'rm '+ fqmdir+srafile
-# 	os.system(cmd4)	
 
-# 	DNCHECK=downloadcheck(fqmdir,sample,seqtype,tail1,tail2)
-# 	if DNCHECK=='NO':
-# 		os.system(cmd1)
-# 		os.system(cmd2)
-# 		os.system(cmd3)
-# 		os.system(cmd4)
-		
-### step1 Mapping ####	
+### step2 Mapping ####	
 	samfile=samoutdir+'/'+sample+'.sam'
 	samlog=samoutdir+'/'+sample+'.sam.log'
 	bamfile=samoutdir+'/'+sample+'.Aligned.sortedByCoord.out.bam'
@@ -217,81 +191,4 @@ for sample in samples:
 		
 	print cmd5
 	os.system(cmd5)
-
-# #### step2 checking strand ####	
-# 	print "\n--------------Step2: Determing strand info("+seqtype+"),Sample:"+sample+"----------------"	
-# 	logfile=testdir+'check.txt'
-# 	outfile=testdir+'strand.txt'
-# 	cmd6 = 'infer_experiment.py -r '+refdir+'/'+geno+'.RefSeq.bed -i '+bamfile+' > '+logfile
-# 	print cmd6
-# 	os.system(cmd6)		
-# 	if seqtype=='SINGLE': 
-# 		strandinfo_SINGLE(logfile,outfile)
-# 	elif seqtype=='PAIRED':
-# 		STRINFO=strandinfo_PAIR(logfile)
-# 		# os.system('rm '+bamfile)
-# 		# os.system('rm '+logfile)
-# 		# os.system('rm '+outfile)
-# 		fastqfile=handel_PAIR(STRINFO,fastqfile1,fastqfile2,bamfile)
-# 		cmd5="STAR --runThreadN "+CPUS+" --genomeDir "+genoDir+" --outSAMtype BAM SortedByCoordinate --readFilesIn "+fastqfile+ " --outFileNamePrefix "+ samoutdir +'/'+sample+'.'
-# 		os.system(cmd5)
-# 		os.system(cmd6)
-# 		strandinfo_SINGLE(logfile,outfile)		
-# 	else:
-# 		print " Library type ERROR, check your sample table!!! "
-	
-# ####step3 Count reads using R####
-# 	newbamfile=samoutdir+'/'+samplename+'.bam'
-# 	os.system('mv '+bamfile +' '+ newbamfile)
-	
-# 	print "\n--------------Step3: Counting reads("+seqtype+"),Sample:"+sample+"----------------"		
-# 	prjdir=os.path.join(rootdir, project+'/')
-# 	arg1=prjdir
-# 	arg2=geno
-# 	arg3=samoutdir+'/'
-# 	arg4=UTRdir
-# 	arg5=CPUS
-# 	###Rscriptfile0=scrdir+'/RNAseq.APAprofile.R'
-# 	Rscriptfile0=scrdir+'RNAseq.APAprofile.R'
-
-# 	####  RUN Rscript ###
-# 	subprocess.call(['Rscript', Rscriptfile0, arg1, arg2, arg3,arg4,arg5])	
-# 	os.system('rm '+newbamfile)
-# 	if seqtype=='SINGLE':
-# 		os.system('rm '+fqmdir+sample+'.*')
-# 	elif seqtype=='PAIRED':
-# 		os.system('rm '+fqmdir+sample+'_*')
-		
-# ####step4 Combine all sample together ####
-# print "\n--------------Step4:  Combine all sample together ----------------"
-# statdir=rawoutdir
-# outputdir=reportdir
-
-# statfiles=sorted(glob.glob(os.path.join(statdir, '*.CDS_reads_TPM.conserved.txt')))
-# for statfile in statfiles:
-# 	df1 = pd.read_table(statfile)
-# 	if statfile==statfiles[0]:
-# 		dfcds=df1.copy()
-# 	else:
-# 		dfcds=pd.merge(dfcds,df1,on=['gene_symbol'],how='left')
-		
-# statfiles=sorted(glob.glob(os.path.join(statdir, '*.UTR_reads_RPM.conserved.txt')))		
-# for statfile in statfiles:
-# 	df1 = pd.read_table(statfile)
-# 	if statfile==statfiles[0]:
-# 		dfUTR=df1.copy()
-# 	else:
-# 		dfUTR=pd.merge(dfUTR,df1,on=['gene_symbol'],how='left')
-		
-# statfiles=sorted(glob.glob(os.path.join(statdir, '*.IPA_LE_reads_RPK.txt')))
-# for statfile in statfiles:
-# 	df1 = pd.read_table(statfile)
-# 	if statfile==statfiles[0]:
-# 		dfIPA=df1.copy()
-# 	else:
-# 		dfIPA=pd.merge(dfIPA,df1,on=['gene_symbol', 'IPAID', 'PASid'],how='left')
-		
-# dfcds.to_csv(outputdir+project+'.CDS.allsample.txt', index=None, mode='w', sep='\t')
-# dfUTR.to_csv(outputdir+project+'.UTR.allsample.txt', index=None, mode='w', sep='\t')		
-# dfIPA.to_csv(outputdir+project+'.IPA_LE.allsample.txt', index=None, mode='w', sep='\t')
 
