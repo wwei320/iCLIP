@@ -11,12 +11,12 @@
 #                --threads(required) <# of threads>; define # of threads;
 #                --genome(Optional) <mm9(default)/hg19/rn5>; define genome version;
 #
-# REQUIREMENTS: Python_Modules as 'import section';"STAR" as RNAseq mapper; SRA toolkit; RSeQ;
+# REQUIREMENTS: Python_Modules as 'import section';"bowtie2" as RNAseq mapper; SRA toolkit; RSeQ;
 #
 #       AUTHOR: Wei Wang  wwei320@gmail.com
 #       
 #      VERSION: 2.0
-#      CREATED: 2019-June-05
+#      CREATED: 2019-Oct-05
 #===============================================================================
 ####import section
 import matplotlib; matplotlib.use('agg')
