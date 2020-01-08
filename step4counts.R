@@ -1,7 +1,7 @@
 #===============================================================================
-#         FILE: iclip_seq step4
+#         FILE: iclip_seq step4 r script
 #
-#  DESCRIPTION: Fully automatic pipline count iclip-seq #reads
+#  DESCRIPTION: an r script using lib(GenomicRanges) to count #reads in iCLIP data with first position alignment
 #
 #      OPTIONS:  --help;                                       show the help message and exit
 #                --project(required) <project_name>; define the project name;
