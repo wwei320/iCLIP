@@ -1,3 +1,15 @@
+#===============================================================================
+#         FILE: iclip_seq step6
+#
+#  DESCRIPTION: count distribution of clip reads in autr vs. cutr which are two 3'utr regions defined by different pA sites
+#
+#
+#       AUTHOR: Wei Wang  wwei320@gmail.com
+#       
+#      VERSION: 2.0
+#      CREATED: 2019-Nov-01
+#===============================================================================
+
 ########to count distribution of clip reads in autr vs. cutr 
 library(tidyr)
 library(ggplot2)
@@ -75,14 +87,7 @@ create_3utr_from_pAs <- function(pA.df,geno){
   threeUTRs = split(x, names(x))
   threeUTRs = reduce(threeUTRs)
 
-  # refdir="/scratch/ww346/analyze/APAanalyzer/REF/"
-  # refdf= read.table(paste0(refdir,"SRS.",geno,".conserved.FL.txt"),header=TRUE)
-
-  # df = refdf%>%dplyr::select(gene_symbol)
-  # dfsymbol = unique(df$gene_symbol)
-  # refsymbol = names(threeUTRs)
-  # mergedsymbol<- intersect(dfsymbol, refsymbol) 
-  # gr=unlist(threeUTRs[mergedsymbol])
+  
   gr=unlist(threeUTRs)                    
   gr$gene_symbol = names(gr)
   gr
@@ -106,14 +111,7 @@ create_intron_from_pAs <- function(pA.df,geno){
   introns = split(x, names(x))
   introns = reduce(introns)
 
-  # refdir="/scratch/ww346/analyze/APAanalyzer/REF/"
-  # refdf= read.table(paste0(refdir,"SRS.",geno,".conserved.FL.txt"),header=TRUE)
-
-  # df = refdf%>%dplyr::select(gene_symbol)
-  # dfsymbol = unique(df$gene_symbol)
-  # refsymbol = names(introns)
-  # mergedsymbol<- intersect(dfsymbol, refsymbol) 
-  # gr=unlist(introns[mergedsymbol])
+  
   gr=unlist(introns)                    
   gr$gene_symbol = names(gr)
   gr
@@ -130,9 +128,7 @@ create_cds_from_pAs <- function(pA.df,geno){
     IDDB <- org.Hs.eg.db 
   }
   
-  #exongr = exons(txdb, columns=c('EXONID','GENEID'), filter=list(gene_id=mergedPASS$gene_id))
-  #rexongr = reduce(split(exongr,elementMetadata(exongr)$GENEID)) 
-  #exonsby = exonsBy(txdb, by=c("tx", "gene"), columns=listColumns(txdb,"exon"), use.names=FALSE)
+  
   CDSbygene = cdsBy(txdb, by=("gene"))
   x = unlist(CDSbygene)
   acc2sym = AnnotationDbi::select(IDDB, keys = names(x), keytype =  "ENTREZID", columns =  "SYMBOL")
@@ -215,12 +211,7 @@ add_hg19_iCLIP_Stau1 = function(pA.df){
   cUTR = create_cUTR_from_pAs(pA.df,geno='hg19')
   aUTR = create_aUTR_from_pAs(pA.df,geno='hg19')
 
-  ##########replace FL GRange with a cds Grange to get cds gr, add back 5utr and 3utr to get fl later
-  #FL = create_FL_from_pAs(pA.df)
-  
-  # FL = create_cds_from_pAs(pA.df)
-  
-  # UTR5= create_5UTR_from_pAs(pA.df)
+
 
   #################################3utr region
   ncread= as.data.frame(mergeByOverlaps(noncoding, Stau1.hg19)[, c("gene_symbol","score")]) %>%
@@ -287,12 +278,6 @@ cluster_hg19_iCLIP_Stau1 = function(pA.df){
   cUTR = create_cUTR_from_pAs(pA.df,geno='hg19')
   aUTR = create_aUTR_from_pAs(pA.df,geno='hg19')
 
-  ##########replace FL GRange with a cds Grange to get cds gr, add back 5utr and 3utr to get fl later
-  #FL = create_FL_from_pAs(pA.df)
-  
-  # FL = create_cds_from_pAs(pA.df)
-  
-  # UTR5= create_5UTR_from_pAs(pA.df)
 
   #################################3utr region
   ncread= as.data.frame(mergeByOverlaps(noncoding, Stau1.hg19)[, c("gene_symbol","score")]) %>%
